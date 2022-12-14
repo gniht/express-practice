@@ -1,25 +1,26 @@
 const express = require("express");
 const fs = require("fs");
-const pug = require('pug');
+const path = require('path');
+const members = require('./Members.js');
+
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 5000;
 
-app.set('views', './views');
-app.set('view engine', 'pug');
 
-const compiledFunction = pug.compileFile('template.pug');
-console.log(compiledFunction({name: 'Timothy'}));
 
-app.use(express.static('views'));
+app.get('/api/members', (req, res) => {
+  res.json(members);
+})
 
-app.listen(port, () =>{
-  console.log(`example app listening at http://localhost:${port}`);
+// get static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.listen(PORT, () =>{
+  console.log(`example app listening ${PORT}`);
 });
 
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Hey', message: 'hihi msg'})
-});
+
 
 // app.get('/', (req, res) => {
 //   console.log(`request URL: ${req.url}`); 
